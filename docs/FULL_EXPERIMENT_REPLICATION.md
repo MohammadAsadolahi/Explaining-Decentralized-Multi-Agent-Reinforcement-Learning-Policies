@@ -118,14 +118,12 @@ training setups, full numerical tables, survey findings, or unseen author code.*
 
 ## Actual additional experiments conducted
 
-As of November 11, 2026, we have also executed and stored:
+As of November 11, 2026, the following experimental checks were executed:
 
-- 800 seeded original gridworld proxy rollouts over the paper's 8 (agent,task)
-  dimension pairs (`reports/executed_proxy_gridworld_not_paper.json`),
+- 800 seeded independent proxy gridworld rollouts (not original benchmarks; proxy-only code and generated outputs removed from the main branch during cleanup),
 - 300 episodes in the **real upstream lbforaging 2.0.0** environment
   (`reports/upstream_lbforaging_*_100episodes.json`), and
-- 2,400 independent NetworkX graph differential checks
-  (`reports/independent_networkx_oracle.json`).
+- 2,400 independent NetworkX graph differential checks (regenerate using `python scripts/independent_stress_oracle.py --trials 2400 --output /tmp/networkx_oracle.json`).
 
 The real-environment results were rerun through the core HDS implementation
 and separately checked for reachability and transitive reduction, with all

@@ -1,148 +1,45 @@
 # Explaining Decentralized Multi-Agent Reinforcement Learning Policies
 
-An **independent, trace-based Python reimplementation** of the post-hoc algorithms in:
+Independent Python reimplementation of the **post-hoc explanation methods** in Boggess, Kraus & Feng, *AAAI 2026* ([paper](https://arxiv.org/abs/2511.10409)). **This is not the authors' official implementation.**
 
-> Boggess, K., Kraus, S., & Feng, L. (2026). *Explaining Decentralized Multi-Agent Reinforcement Learning Policies*. AAAI-26. [arXiv:2511.10409](https://arxiv.org/abs/2511.10409).
+## Included
 
-**Important:** This is NOT the authors' official source code, and the published numerical experiments have **not** been reproduced. The paper does not release trained policies/trajectories or sufficient environment/training details to validate its Tables 1–6 directly. See [replication scope](docs/REPLICATION.md) and [experiment protocol](docs/FULL_EXPERIMENT_REPLICATION.md).
+- **Algorithm 1 — HDS:** agent task traces → per-episode Hasse diagrams, joint-task annotations and transitive reduction.
+- **Algorithms 2–4:** **When**, **What**, and **Why Not** explanations, including uncertainty and exact Boolean minimization.
+- CLI, trace/event adapters, baseline approximation, graph and Boolean verification tests.
+- Frozen **real Level-Based Foraging** traces (`reports/upstream_lbforaging_*_100episodes.json`), collected with a *seeded, untrained heuristic*, plus repeatability hashes. The paper's SEAC/IA2C policies were **not** used.
 
-## Implemented
-
-- **Algorithm 1 (HDS):** assemble one Hasse diagram per episode from decentralized agent task traces; merge jointly completed tasks; insert agent-local precedence edges; transitive reduction; reject cycles and repeated task events.
-- **Algorithm 2 (When):** query target groups, construct unordered-task uncertainty dictionary, encode Boolean abstract states, exact Quine–McCluskey implicant minimization and text templates.
-- **Algorithm 3 (What):** union immediate successors (certainly after) and incomparable tasks (order uncertain) across observed episodes.
-- **Algorithm 4 (Why Not):** encode user-specified failed conditions as target, observed successful completions as non-targets, minimize differences; follows Appendix B in the longer arXiv version.
-- Task-completion callback adapters; per-agent prefix-policy graph *approximation* for the baseline; Graphviz DOT output; empirical diagram frequency summaries; unit and randomized property tests.
-
-## Install and test
+## Quick start
 
 ```bash
-python -m pip install -e '.[test]'
-pytest -q
-```
-
-No nonstandard package is required for the library itself; `pytest` is needed only for tests. Python 3.10+.
-
-## Reproduce the paper's Figure 1
-
-```bash
+python -m pip install -e '.[test,audit]'
+python -m pytest -q
 python -m dmarl_explain.cli examples/figure1.json --query diagram
-python -m dmarl_explain.cli examples/figure1.json --query dot > figure1.dot
 python -m dmarl_explain.cli examples/figure1.json --query what --task C
-python -m dmarl_explain.cli examples/figure1.json --query summary
-python -m dmarl_explain.cli examples/figure1.json --query when --task C --agents 2 4 --features task:A task:B task:C task:D task:E task:F
+python scripts/audit_lbf_artifacts.py reports/upstream_lbforaging_*_100episodes.json --output /tmp/lbf_audit.json
 ```
 
-The example agent traces are `1:A,B,F`, `2:A,C,D`, `3:B,D,F`, `4:C,E,F`. This should yield **7 nodes** (including the root) and **8 reduced edges**. The `What` query for C returns certain successors `{D,E}` and unordered task `{B}`.
+**Expected Figure 1:** 7 nodes (root included), 8 edges; tasks D/E are immediate successors of C, while B is unordered. Run `dmarl-benchmark INPUT.json --output /tmp/benchmark.json` on a dataset of `{"episodes": [{"agent_id": ["task_1", "task_2"]}]}`. `dmarl-collect` supports new environment/policy adapters.
 
-## Python API
+For a fresh upstream LBF rollout (**heuristic, not paper policy**):
 
-```python
-from dmarl_explain import build_hasse, explain_what, explain_when
-
-traces = {'1': ['A', 'B', 'F'], '2': ['A', 'C', 'D'],
-          '3': ['B', 'D', 'F'], '4': ['C', 'E', 'F']}
-diagram = build_hasse(traces)
-assert len(diagram.nodes) == 7
-print(diagram.to_dict())
-print(explain_what([diagram], 'C').text)
-
-# Query Boolean features should be selected by *domain knowledge*.
-result = explain_when([diagram], ['2', '4'], 'C',
-                      features=['task:A', 'task:B', 'task:C',
-                                'task:D', 'task:E', 'task:F',
-                                'agent:2:C', 'agent:4:C'])
-print(result.text)
+```bash
+python -m pip install -e '.[lbf]'
+python scripts/run_lbf_external.py --agents 9 --food 9 --grid 19 \
+  --sight 1 --episodes 100 --seed 20261111 --output /tmp/lbf_9p9f.json
 ```
 
-The example is a **Boolean state discriminator**, not a proof of causal prerequisites. The exact Boolean features, when-query node semantics, and English sentence structure are **not** specified fully in the paper. This implementation makes explicit, audited choices; see `docs/REPLICATION.md`. An inconsistent feature selection can produce contradicting positive/negative states; the implementation raises an error instead of inventing a causal explanation.
+## Verified vs. not yet reproduced
 
-## Input format
+**Verified:** paper's Figure 1; unit, independent-oracle and exhaustive small-case checks; reproducible 100-episode traces for three upstream LBF settings. The GitHub CI also runs tests on Python 3.10/3.12 and fresh LBF rollouts.
 
-JSON with an `episodes` array. Each episode is a mapping from agent ID to ordered task-completion labels:
+**Not reproduced:** the authors' SEAC/IA2C checkpoints, all four exact trained-policy benchmarks, numerical paper tables, exact query feature choices/baseline, or human-study results. The paper leaves important implementation details unspecified; generated explanations are discriminative descriptions, **not causal proofs**. See [fidelity notes](docs/REPLICATION.md), [experimental provenance](docs/LIVE_EXPERIMENT_AUDIT.md), and [replication protocol](docs/FULL_EXPERIMENT_REPLICATION.md).
 
-```json
-{"episodes": [{"1": ["A", "B"], "2": ["A", "C"]}]}
-```
+## Next steps for the colleague (in order)
 
-Raw `s,a,r,s'` trajectories must first be mapped to task completions with `extract_episode(trajectories, callback)`. The callback is **domain-specific**, as noted in Section 3 of the paper.
+1. **Run the quick-start tests** and inspect `src/dmarl_explain/` and `examples/figure1.json`.
+2. **Obtain authors' artifacts:** SEAC/IA2C trained checkpoints, seeds, SR/LBF/RW/PP configurations, task-event mappings, and query/baseline specifications. Record source revisions and hashes.
+3. **Integrate genuine policy rollouts:** only local observations to policies; log raw transitions and stable task IDs. Collect 100 episodes for each *actual paper configuration* and run `dmarl-benchmark`.
+4. **Compare against the paper** (summaries, When/What/Why Not, and baselines), document discrepancies and seeds, and add regression tests. Handle the user study separately.
 
-## Replication status
-
-The code reproduces the *specified algorithms and Figure 1* in tests, not the published benchmark values. To reproduce Tables 1–6 faithfully, future contributions must integrate and validate original SEAC and IA2C training, the exact SR/LBF/RW/PP environments, trajectories for 100 episodes per setting, task completion rules, query feature definitions, baselines, and seeds/checkpoints. Please do not treat synthetic examples as validation of these experimental tables.
-
-## Citation
-
-If using the algorithms, cite the authors' AAAI-26 paper. This repository is an independently written research replication.
-
-## Reproduction audit and live policy collection
-
-`dmarl-benchmark real_episodes.json --output report.json` independently
-recomputes HDS node/edge statistics, validates every episode, fingerprints the
-source and compares only matched 100-episode settings with the published table
-**reference targets**. `dmarl-collect` executes policy and environment adapters
-and exports provenance-tagged episode traces. This cannot magically supply the
-authors' missing checkpoints or feature extractors. See
-[docs/FULL_EXPERIMENT_REPLICATION.md](docs/FULL_EXPERIMENT_REPLICATION.md).
-
-Run `python scripts/performance_smoke.py` for strictly labeled synthetic
-scalability measurements (not the original empirical results). The exact
-Boolean minimizer now supports sparse high-dimensional observation vectors
-without a hard 14-feature limit; it fails transparently if the combinatorial
-prime-implicant budget is exceeded.
-
-## Independent executable experiments (not the paper's trained policies)
-
-**Sandbox:** `PYTHONPATH=src python scripts/run_proxy_experiments.py`
-executes **100 completed policy rollouts per each of eight agent/task count pairs**
-in a small independently constructed cooperative gridworld. This validates
-end-to-end local observations -> actions -> rewards -> agent task traces ->
-Hasse diagrams, *not* the original SR/LBF/RW/PP environments or SEAC/IA2C
-policies. Outputs `reports/executed_proxy_gridworld_not_paper.json`.
-
-**Upstream LBF (GitHub Actions):** the `upstream-lbforaging` job pins the real
-`lbforaging==2.0.0` environment and executes 100 episodes for each of 2p/3f,
-5p/5f, and 9p/9f with sight=1, plus a local-observation greedy *untrained*
-policy. Data and measured HDS statistics are uploaded as CI artifacts.
-`src/dmarl_explain/lbf_adapter.py` identifies a task as an initially placed
-food item and uses a triple signal (global food removal, adjacent LOAD action,
-positive local reward) to identify contributing agents. The extractor's use of
-global state is **post-hoc logging only**; no policy may see that state.
-Upstream environment code and version details are not the authors' own training
-config. **Do not compare these rollout results to paper tables as like-for-like.**
-
-See `docs/LIVE_EXPERIMENT_AUDIT.md` for detailed provenance and limitations.
-
-The completed experiment outputs are committed under
-`reports/upstream_lbforaging_*_100episodes.json` and can be audited with
-`python scripts/audit_lbf_artifacts.py reports/upstream_lbforaging_*_100episodes.json`.
-Task identity from food coordinate ranks is episode-local; cross-episode query
-answers require an externally specified shared task ontology and are rejected
-for such datasets. An additional independent NetworkX differential oracle
-(`python scripts/independent_stress_oracle.py`) checked 2,400 randomized
-partial-order instances without differences.
-
-An independently implemented exhaustive Boolean oracle checked **606
-fully-observed truth tables** (all 256 three-bit functions and 350 seeded
-four-bit functions) for exact equivalence and optimal literal/term cost.
-Execute `python scripts/exhaustive_boolean_oracle.py` to repeat the check.
-
-## GitHub Actions repeatability audit
-
-Across four independent GitHub Actions executions, every 100-episode
-upstream-LBF heuristic task trace for each of the 2p3f, 5p5f and 9p9f settings
-matched its reference dataset exactly (900 repeated trace records compared).
-Run `python scripts/audit_ci_repeatability.py --help` to recheck downloaded
-workflow ZIPs; `reports/lbf_ci_repeatability_audit.json` contains all artifact
-IDs and hashes. A frozen-hash regression test verifies the committed data on
-every CI run. This establishes experimental *reproducibility of our generated
-heuristic data*, **not** replication of the paper's trained SEAC/IA2C results.
-
-## Exhaustive finite graph verification
-
-`python scripts/exhaustive_small_traces.py` enumerates all **4,096** possible
-ordered-subsequence combinations for three tasks and three agents. All **1,840
-consistent** traces pass independent graph and path-projection theorem checks,
-and all **2,256 inconsistent cyclic** traces are explicitly rejected. A
-regression test and CI smoke job rerun this model checker. See
-`reports/exhaustive_small_traces.json` for the frozen results.
+**Do not label synthetic or heuristic LBF measurements as replication of the paper's trained-policy results.**

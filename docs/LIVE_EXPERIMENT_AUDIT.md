@@ -1,17 +1,8 @@
 # Executable experimental audit (2026-11-11)
 
-## Independent sandbox rollouts
+## Historical proxy validation
 
-Eight dimensions from the paper's computational-experiment matrix were used,
-with an **independently authored cooperative gridworld**, not SR/LBF/RW/PP:
-100 seeded episodes per setting, observation-only decentralized waypoint
-controllers, 100% task completion, and an explicit event extractor translating
-local completion rewards into agent task traces. All 800 episodes were
-independently checked for HDS reachability equivalence and cover-edge
-minimality by `assert_faithful_hasse`. The local experiment results are in
-`reports/executed_proxy_gridworld_not_paper.json`; these are measurements of
-our code but **not** reproduction of any paper numerical table. Every setting
-is recorded with `comparison_to_paper_valid=false`.
+Earlier sandbox proxy rollouts (800 episodes across eight agent/task sizes) were used to exercise the pipeline, but were **not** original benchmark environments. Their generated JSON and proxy-only code were removed from `main` during repository cleanup; the independent real-LBF artifacts and verification code below remain.
 
 ## Official external benchmark
 
@@ -84,7 +75,7 @@ Boolean functions of three variables and 350 additional seeded four-variable
 functions. An independent full-cube enumeration plus dynamic-programming
 set-cover oracle agreed with the package's exact minimum-literal DNF solver
 for all 606 cases, including fully observed true/false truth-table semantics.
-The recorded result is `reports/independent_boolean_oracle.json`.
+Re-run `python scripts/exhaustive_boolean_oracle.py --output /tmp/independent_boolean_oracle.json` to regenerate the result (generated JSON is not versioned).
 This validates Boolean minimization, not the author-specific feature selection
 or the scientific causality of a generated natural-language prerequisite.
 
@@ -133,7 +124,6 @@ paper's stated path-projection correctness/completeness conditions. The
 other **2,256** combinations encode contradictory task precedences that
 would create a directed cycle; these are rejected as invalid (a Hasse diagram
 cannot represent inconsistent global precedence). There were zero graph or
-path-projection failures among valid combinations. Results are frozen in
-`reports/exhaustive_small_traces.json`. This exhaustive finite check supports
+path-projection failures among valid combinations. Regenerate the result with `python scripts/exhaustive_small_traces.py --output /tmp/exhaustive_small_traces.json`. This exhaustive finite check supports
 Algorithm 1 correctness under its valid-input assumptions, not reproduction
 of the authors' experimental training/evaluation datasets.

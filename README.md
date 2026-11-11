@@ -30,6 +30,7 @@ python -m dmarl_explain.cli examples/figure1.json --query diagram
 python -m dmarl_explain.cli examples/figure1.json --query dot > figure1.dot
 python -m dmarl_explain.cli examples/figure1.json --query what --task C
 python -m dmarl_explain.cli examples/figure1.json --query summary
+python -m dmarl_explain.cli examples/figure1.json --query when --task C --agents 2 4 --features task:A task:B task:C task:D task:E task:F
 ```
 
 The example agent traces are `1:A,B,F`, `2:A,C,D`, `3:B,D,F`, `4:C,E,F`. This should yield **7 nodes** (including the root) and **8 reduced edges**. The `What` query for C returns certain successors `{D,E}` and unordered task `{B}`.
@@ -49,11 +50,12 @@ print(explain_what([diagram], 'C').text)
 # Query Boolean features should be selected by *domain knowledge*.
 result = explain_when([diagram], ['2', '4'], 'C',
                       features=['task:A', 'task:B', 'task:C',
+                                'task:D', 'task:E', 'task:F',
                                 'agent:2:C', 'agent:4:C'])
 print(result.text)
 ```
 
-The exact Boolean features, when-query node semantics, and English sentence structure are **not** specified fully in the paper. This implementation makes explicit, audited choices; see `docs/REPLICATION.md`. An inconsistent feature selection can produce contradicting positive/negative states; the implementation raises an error instead of inventing a causal explanation.
+The example is a **Boolean state discriminator**, not a proof of causal prerequisites. The exact Boolean features, when-query node semantics, and English sentence structure are **not** specified fully in the paper. This implementation makes explicit, audited choices; see `docs/REPLICATION.md`. An inconsistent feature selection can produce contradicting positive/negative states; the implementation raises an error instead of inventing a causal explanation.
 
 ## Input format
 

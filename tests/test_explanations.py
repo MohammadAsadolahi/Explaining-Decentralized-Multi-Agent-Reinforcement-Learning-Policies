@@ -72,3 +72,14 @@ def test_what_not_found_and_limit():
         explain_what([build_hasse({1: ["A"]})], "Z")
     with pytest.raises(ValueError, match="requires"):
         minimize({1}, {0}, 15)
+
+
+def test_figure_1_documented_when_vocabulary_is_separable():
+    d = build_hasse({'1': ['A', 'B', 'F'], '2': ['A', 'C', 'D'],
+                     '3': ['B', 'D', 'F'], '4': ['C', 'E', 'F']})
+    features = ['task:A', 'task:B', 'task:C', 'task:D', 'task:E',
+                'task:F', 'agent:2:C', 'agent:4:C']
+    result = explain_when([d], [2, 4], 'C', features=features)
+    assert all(eval_formula(result.formula, p) for p in result.targets)
+    assert not any(eval_formula(result.formula, n) for n in result.non_targets)
+    assert 'task:B' in result.uncertain_features

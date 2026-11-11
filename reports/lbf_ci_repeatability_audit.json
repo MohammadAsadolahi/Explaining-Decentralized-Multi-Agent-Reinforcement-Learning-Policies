@@ -1,0 +1,172 @@
+{
+  "all_repeated_traces_identical": true,
+  "ci_runs": [
+    42991743637,
+    42992626483,
+    42993075986,
+    42993068413
+  ],
+  "comparison_basis": "canonical JSON of episode task traces (not ZIP bytes or metadata)",
+  "distinct_100_episode_configurations": 3,
+  "environment": "lbforaging==2.0.0",
+  "frozen_reference_file_pattern": "reports/upstream_lbforaging_{setting}_100episodes.json",
+  "independently_repeated_episodes_compared": 900,
+  "policy": "untrained heuristic NOT original SEAC/IA2C",
+  "published_paper_experiments_reproduced": false,
+  "run_artifact_mapping": {
+    "42991743637": {
+      "2p3f": 13842525439,
+      "5p5f": 13841344616,
+      "9p9f": 13841847868
+    },
+    "42992626483": {
+      "2p3f": 13842935405,
+      "5p5f": 13841754822,
+      "9p9f": 13842920401
+    },
+    "42993068413": {
+      "2p3f": 13843025690,
+      "5p5f": 13843400073,
+      "9p9f": 13842168248
+    },
+    "42993075986": {
+      "2p3f": 13843151815,
+      "5p5f": 13841794752,
+      "9p9f": 13842113323
+    }
+  },
+  "settings": {
+    "2p3f": {
+      "agents": 2,
+      "artifact_sha256": [
+        "4c305b9a484909817c3cc744789d86f0ecf9b17d1ece0a318396980f28dcf9fc",
+        "8fc99ac1d256cd65cdccd7601402816e08a03496f92c413add5cf9b7a287f004",
+        "f5966c301812078a88aa710fc437ad9b0c6de81fe76bf5dcff4d9c8bebb9f056",
+        "e3db3c682883b749e0e5e20de7fdddd6d0b9d31b912948705257f7ea1babffdc"
+      ],
+      "config": {
+        "force_coop": false,
+        "grid": 11,
+        "max_steps": 50,
+        "sight": 1
+      },
+      "episode_sha256": "484f8d81dbbb11c530c42ba6fdb11978eb1353409ede9cd27870a9932d42d573",
+      "episodes_per_run": 100,
+      "files": [
+        "upstream_lbf_13842525439.zip",
+        "lbf_repeat_13842935405.zip",
+        "lbf_repeat_13843151815.zip",
+        "lbf_repeat_13843025690.zip"
+      ],
+      "foods": 3,
+      "matching_repeats": 3,
+      "measured": {
+        "edge_count_histogram": {
+          "0": 38,
+          "1": 39,
+          "2": 20,
+          "3": 2,
+          "4": 1
+        },
+        "mean_edges": 0.89,
+        "mean_nodes": 1.88,
+        "unique_diagrams": 27
+      },
+      "number_of_runs": 4,
+      "same_episodes_across_runs": true,
+      "seed": 20261111
+    },
+    "5p5f": {
+      "agents": 5,
+      "artifact_sha256": [
+        "174edf4c93437c4ebbc77991d47bc279450cb54dfa42683aa21499edf834ff9b",
+        "5af280aa14a482d088265b281d7da9a7f54cd3560c59161bdb57d41c66e50e7d",
+        "36e48786500cde126a4fb2034b5dfcfa39e66f71f9b28e0cbfd979dcc95af08a",
+        "f6632e9bccd928ccede31190596110ab971d2580b4372a5147453c724060519a"
+      ],
+      "config": {
+        "force_coop": false,
+        "grid": 15,
+        "max_steps": 50,
+        "sight": 1
+      },
+      "episode_sha256": "a6592d81b349b919b6659bd64d339338259fb52cbad3203568088d4b663dc0ca",
+      "episodes_per_run": 100,
+      "files": [
+        "upstream_lbf_13841344616.zip",
+        "lbf_repeat_13841754822.zip",
+        "lbf_repeat_13841794752.zip",
+        "lbf_repeat_13843400073.zip"
+      ],
+      "foods": 5,
+      "matching_repeats": 3,
+      "measured": {
+        "edge_count_histogram": {
+          "0": 13,
+          "1": 38,
+          "2": 30,
+          "3": 14,
+          "4": 3,
+          "5": 2
+        },
+        "mean_edges": 1.62,
+        "mean_nodes": 2.62,
+        "unique_diagrams": 79
+      },
+      "number_of_runs": 4,
+      "same_episodes_across_runs": true,
+      "seed": 20261111
+    },
+    "9p9f": {
+      "agents": 9,
+      "artifact_sha256": [
+        "b51662a1fee827b6b3fc9bd57bb6a7735ea460e3482fe0b9e72f0d3812c5aea8",
+        "8b577e2c2932a06f642efe7b99e6c0ad444c157e29082a540cfa1a2d75a5086e",
+        "58953ad5045a433a24d89c603ee97472d8a0d774e2adaeedb5a49ef776c62dec",
+        "aff67cd60d6447dc1e9a55c638a678298d16e840bdbcdce70afe6682db28859b"
+      ],
+      "config": {
+        "force_coop": false,
+        "grid": 19,
+        "max_steps": 50,
+        "sight": 1
+      },
+      "episode_sha256": "b45b068e8e6fb987660c38a1ff977352f4596fb145efc24157367608fb9f25d9",
+      "episodes_per_run": 100,
+      "files": [
+        "upstream_lbf_13841847868.zip",
+        "lbf_repeat_13842920401.zip",
+        "lbf_repeat_13842113323.zip",
+        "lbf_repeat_13842168248.zip"
+      ],
+      "foods": 9,
+      "matching_repeats": 3,
+      "measured": {
+        "edge_count_histogram": {
+          "0": 1,
+          "1": 2,
+          "2": 12,
+          "3": 13,
+          "4": 33,
+          "5": 18,
+          "6": 14,
+          "7": 6,
+          "9": 1
+        },
+        "mean_edges": 4.22,
+        "mean_nodes": 5.2,
+        "unique_diagrams": 100
+      },
+      "number_of_runs": 4,
+      "same_episodes_across_runs": true,
+      "seed": 20261111
+    }
+  },
+  "source_commit_references": [
+    "181a7ed51ac7744db0e1e8151ad6d9d27b6b54c6",
+    "334cfc3d62a19491b83421a45f934074e95bc9ac",
+    "28fe31775b36c8646a1ec0d15c6e1f4aa331e2de"
+  ],
+  "status": "repeated_artifact_trajectory_identity_verified",
+  "warning": "Repeated heuristic trajectories are not original paper SEAC/IA2C trajectories. ZIP metadata differs after adding task_identity_scope."
+}

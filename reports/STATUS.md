@@ -45,3 +45,22 @@ not a recovered policy evaluation.
   truth table and 350 seeded 4-variable truth tables, using brute-force cube
   enumeration and dynamic-programming optimal cover; zero differences.
   Output: `independent_boolean_oracle.json`.
+
+## Repeated-execution verification
+
+- Three official LBF heuristic 100-episode datasets have **identical canonical
+  episode trace hashes across four independent GitHub Actions executions**;
+  compared 900 repeat-episode records with zero mismatches.
+- The 12 artifact IDs, ZIP content hashes, canonical episode digests, CI runs
+  and config values are recorded in `lbf_ci_repeatability_audit.json`.
+- The deterministic stability claim is for untrained local-observation
+  heuristic policies in the pinned environment only. **The paper's SEAC and
+  IA2C trajectories and published numerical results remain unreplicated.**
+
+## Exhaustive HDS finite model check
+
+- **4,096** total combinations from all possible unique A/B/C subtraces for
+  each of three agents; **1,840 valid acyclic** inputs, **2,256 cyclic
+  conflicting** inputs rejected. Every valid graph passed independent cover
+  and reachability oracles plus the paper's path-projection correctness and
+  completeness criteria. Zero failures. See `exhaustive_small_traces.json`.

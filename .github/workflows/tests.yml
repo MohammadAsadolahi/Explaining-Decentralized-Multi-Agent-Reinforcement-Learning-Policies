@@ -22,6 +22,7 @@ jobs:
           python scripts/paper_consistency.py > paper_consistency.json
           python scripts/independent_stress_oracle.py --trials 2400 --output independent_oracle.json
           python scripts/exhaustive_boolean_oracle.py --four-bit-samples 350 --output boolean_oracle.json
+          python scripts/exhaustive_small_traces.py --output exhaustive_small_traces.json
           python scripts/audit_lbf_artifacts.py reports/upstream_lbforaging_*_100episodes.json --output real_lbf_replay.json
 
   upstream-lbforaging:

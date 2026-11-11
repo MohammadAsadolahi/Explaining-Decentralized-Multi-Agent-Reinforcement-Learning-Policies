@@ -126,3 +126,23 @@ An independently implemented exhaustive Boolean oracle checked **606
 fully-observed truth tables** (all 256 three-bit functions and 350 seeded
 four-bit functions) for exact equivalence and optimal literal/term cost.
 Execute `python scripts/exhaustive_boolean_oracle.py` to repeat the check.
+
+## GitHub Actions repeatability audit
+
+Across four independent GitHub Actions executions, every 100-episode
+upstream-LBF heuristic task trace for each of the 2p3f, 5p5f and 9p9f settings
+matched its reference dataset exactly (900 repeated trace records compared).
+Run `python scripts/audit_ci_repeatability.py --help` to recheck downloaded
+workflow ZIPs; `reports/lbf_ci_repeatability_audit.json` contains all artifact
+IDs and hashes. A frozen-hash regression test verifies the committed data on
+every CI run. This establishes experimental *reproducibility of our generated
+heuristic data*, **not** replication of the paper's trained SEAC/IA2C results.
+
+## Exhaustive finite graph verification
+
+`python scripts/exhaustive_small_traces.py` enumerates all **4,096** possible
+ordered-subsequence combinations for three tasks and three agents. All **1,840
+consistent** traces pass independent graph and path-projection theorem checks,
+and all **2,256 inconsistent cyclic** traces are explicitly rejected. A
+regression test and CI smoke job rerun this model checker. See
+`reports/exhaustive_small_traces.json` for the frozen results.

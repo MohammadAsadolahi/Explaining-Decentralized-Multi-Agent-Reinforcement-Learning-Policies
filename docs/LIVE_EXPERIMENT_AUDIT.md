@@ -87,3 +87,53 @@ for all 606 cases, including fully observed true/false truth-table semantics.
 The recorded result is `reports/independent_boolean_oracle.json`.
 This validates Boolean minimization, not the author-specific feature selection
 or the scientific causality of a generated natural-language prerequisite.
+
+## Independent CI repeatability across four runs
+
+The exact pinned `lbforaging==2.0.0` and locally observing untrained policy
+were executed in four separate GitHub Actions runs (one initial validation,
+one intermediate run, and both push/PR checks on the final audit commit):
+`42991743637`, `42992626483`, `42993075986`, `42993068413`.
+Each generated three independently executed **100-episode** datasets (2p3f,
+5p5f, and 9p9f) with seed `20261111`. All 12 ZIP artifacts were downloaded
+and independently compared in the sandbox using
+`scripts/audit_ci_repeatability.py`. All three per-setting canonical episode
+hashes matched across all four executions, and their graph metrics were
+identical. This is **900 identical repeated episode records compared against
+300 reference episodes**, not 1,200 statistically independent samples.
+
+The machine-readable record is
+`reports/lbf_ci_repeatability_audit.json`, including every GitHub artifact ID,
+artifact ZIP digest, canonical episode-trace digest, exact configuration and
+measured metrics. CI tests also recompute and verify the canonical hashes from
+the frozen external environment datasets in `reports/` and deliberately alter
+a trajectory to verify that discrepancies are rejected. Re-run a full
+comparison after downloading artifacts using:
+
+```bash
+python scripts/audit_ci_repeatability.py \
+  --group 2p3f=first_2p3f.zip --group 2p3f=second_2p3f.zip \
+  --group 5p5f=first_5p5f.zip --group 5p5f=second_5p5f.zip \
+  --group 9p9f=first_9p9f.zip --group 9p9f=second_9p9f.zip \
+  --output /tmp/ci_repeatability.json
+```
+
+**Interpretation:** Repeated execution matches our frozen task-event datasets,
+with no divergence in the run settings and implementation tested. It does not
+imply exact reproduction of the authors' original SEAC/IA2C training runs,
+their task identity ontology or their quantitative paper tables.
+
+## Exhaustive finite HDS model checking
+
+`python scripts/exhaustive_small_traces.py` enumerates **every one of 4,096**
+possible combinations of ordered distinct-task subsequences for three agents
+and three tasks A/B/C. For all **1,840 acyclic** combinations it validates
+both the independent mathematical reachability/cover graph oracle and the
+paper's stated path-projection correctness/completeness conditions. The
+other **2,256** combinations encode contradictory task precedences that
+would create a directed cycle; these are rejected as invalid (a Hasse diagram
+cannot represent inconsistent global precedence). There were zero graph or
+path-projection failures among valid combinations. Results are frozen in
+`reports/exhaustive_small_traces.json`. This exhaustive finite check supports
+Algorithm 1 correctness under its valid-input assumptions, not reproduction
+of the authors' experimental training/evaluation datasets.

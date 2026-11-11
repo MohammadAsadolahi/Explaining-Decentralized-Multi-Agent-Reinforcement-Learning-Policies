@@ -118,7 +118,7 @@ def _select_features(diagrams: Sequence[HasseDiagram],
 
 def explain_when(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
                  task: str, *, features: Iterable[str] | None = None,
-                 max_features: int = 14) -> BooleanExplanation:
+                 max_features: int | None = None) -> BooleanExplanation:
     """Algorithm 2, positive task-completion nodes vs. all other task nodes.
 
     On positive nodes, unordered features are conservatively set to True.
@@ -155,7 +155,7 @@ def explain_when(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
 def explain_why_not(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
                     task: str, conditions: Mapping[str, bool], *,
                     features: Iterable[str] | None = None,
-                    max_features: int = 14) -> BooleanExplanation:
+                    max_features: int | None = None) -> BooleanExplanation:
     """Algorithm 4: supplied failed condition is target; successes are 0s.
 
     Conditions must specify the full Boolean state across relevant features;

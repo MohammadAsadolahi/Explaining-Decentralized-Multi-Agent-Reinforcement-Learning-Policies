@@ -4,7 +4,7 @@ An **independent, trace-based Python reimplementation** of the post-hoc algorith
 
 > Boggess, K., Kraus, S., & Feng, L. (2026). *Explaining Decentralized Multi-Agent Reinforcement Learning Policies*. AAAI-26. [arXiv:2511.10409](https://arxiv.org/abs/2511.10409).
 
-**Important:** This is NOT the authors' official source code, and the published numerical experiments have **not** been reproduced. The paper does not release trained policies/trajectories or sufficient environment/training details to validate its Tables 1–6 directly. See [replication scope](docs/REPLICATION.md).
+**Important:** This is NOT the authors' official source code, and the published numerical experiments have **not** been reproduced. The paper does not release trained policies/trajectories or sufficient environment/training details to validate its Tables 1–6 directly. See [replication scope](docs/REPLICATION.md) and [experiment protocol](docs/FULL_EXPERIMENT_REPLICATION.md).
 
 ## Implemented
 
@@ -74,3 +74,19 @@ The code reproduces the *specified algorithms and Figure 1* in tests, not the pu
 ## Citation
 
 If using the algorithms, cite the authors' AAAI-26 paper. This repository is an independently written research replication.
+
+## Reproduction audit and live policy collection
+
+`dmarl-benchmark real_episodes.json --output report.json` independently
+recomputes HDS node/edge statistics, validates every episode, fingerprints the
+source and compares only matched 100-episode settings with the published table
+**reference targets**. `dmarl-collect` executes policy and environment adapters
+and exports provenance-tagged episode traces. This cannot magically supply the
+authors' missing checkpoints or feature extractors. See
+[docs/FULL_EXPERIMENT_REPLICATION.md](docs/FULL_EXPERIMENT_REPLICATION.md).
+
+Run `python scripts/performance_smoke.py` for strictly labeled synthetic
+scalability measurements (not the original empirical results). The exact
+Boolean minimizer now supports sparse high-dimensional observation vectors
+without a hard 14-feature limit; it fails transparently if the combinatorial
+prime-implicant budget is exceeded.

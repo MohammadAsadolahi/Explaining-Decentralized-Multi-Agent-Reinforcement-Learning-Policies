@@ -70,8 +70,11 @@ def test_minimize_exhaustive_random_consistency_and_no_redundant_literals():
 def test_what_not_found_and_limit():
     with pytest.raises(ValueError, match="not observed"):
         explain_what([build_hasse({1: ["A"]})], "Z")
+    # Width is no longer arbitrarily capped (the paper has large feature sets).
+    high = minimize({1 << 152}, {0}, 153)
+    assert len(high) == 1 and high[0].literals(153) == 1
     with pytest.raises(ValueError, match="requires"):
-        minimize({1}, {0}, 15)
+        minimize({1}, {0}, 15, max_features=14)
 
 
 def test_figure_1_documented_when_vocabulary_is_separable():

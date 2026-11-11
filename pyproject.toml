@@ -17,9 +17,14 @@ test = ["pytest>=7"]
 
 [project.scripts]
 dmarl-explain = "dmarl_explain.cli:main"
+dmarl-benchmark = "dmarl_explain.benchmark_cli:main"
+dmarl-collect = "dmarl_explain.rollout_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+dmarl_explain = ["published_metrics.json"]

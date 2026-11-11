@@ -1,0 +1,81 @@
+{
+  "agents_by_task": {
+    "A": [
+      "1",
+      "2"
+    ],
+    "B": [
+      "1",
+      "3"
+    ],
+    "C": [
+      "2",
+      "4"
+    ],
+    "D": [
+      "2",
+      "3"
+    ],
+    "E": [
+      "4"
+    ],
+    "F": [
+      "1",
+      "3",
+      "4"
+    ]
+  },
+  "edges": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "A",
+      "C"
+    ],
+    [
+      "B",
+      "D"
+    ],
+    [
+      "C",
+      "D"
+    ],
+    [
+      "C",
+      "E"
+    ],
+    [
+      "D",
+      "F"
+    ],
+    [
+      "E",
+      "F"
+    ],
+    [
+      "__root__",
+      "A"
+    ]
+  ],
+  "expected_edge_count": 8,
+  "expected_node_count": 7,
+  "figure1_match": true,
+  "observed_edge_count": 8,
+  "observed_node_count": 7,
+  "paper_full_experimental_replication": false,
+  "scope": "Paper Figure 1, illustrative trace data explicitly printed in the conference paper",
+  "verification": "independent Floyd-Warshall closure, participant labels, transitive reduction",
+  "what_query_C": {
+    "certain": [
+      "D",
+      "E"
+    ],
+    "query_task": "C",
+    "text": "After task C, the following immediate successors are observed: D, E. Tasks with uncertain order: B.",
+    "uncertain": [
+      "B"
+    ]
+  }
+}

@@ -15,3 +15,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install -e '.[test]'
       - run: python -m pytest -q
+      - name: Benchmark reference and Figure 1 smoke check
+        run: |
+          python -m dmarl_explain.benchmark_cli examples/figure1.json --output figure1_audit.json
+          python scripts/performance_smoke.py > synthetic_smoke.json

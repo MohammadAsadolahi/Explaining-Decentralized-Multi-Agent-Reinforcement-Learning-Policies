@@ -1,0 +1,117 @@
+{
+  "all_basic_checks_pass": true,
+  "feature_vocabulary_gap": {
+    "interpretation": "The paper must be using richer predicates, repeated feature counts, or another aggregation: exact Fq definitions are not provided.",
+    "maximum_unique_default_task_and_agent_task_features": 95,
+    "published_count_exceeds_simple_vocabulary": true,
+    "published_uncertain_feature_count": 153,
+    "setting": "SEAC RW(4,19)"
+  },
+  "full_experimental_replication": false,
+  "hds_algebraic_checks": [
+    {
+      "agents": 5,
+      "domain": "LBF",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 6,
+      "policy": "IA2C",
+      "published_mean_edges": 5.62,
+      "published_vertices": 6,
+      "source_table": 3,
+      "tasks": 5,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 7,
+      "domain": "PP",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 7,
+      "policy": "IA2C",
+      "published_mean_edges": 6,
+      "published_vertices": 7,
+      "source_table": 3,
+      "tasks": 6,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 3,
+      "domain": "RW",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 5,
+      "policy": "IA2C",
+      "published_mean_edges": 4,
+      "published_vertices": 5,
+      "source_table": 3,
+      "tasks": 4,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 9,
+      "domain": "SR",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 8,
+      "policy": "IA2C",
+      "published_mean_edges": 7.79,
+      "published_vertices": 8,
+      "source_table": 3,
+      "tasks": 7,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 9,
+      "domain": "LBF",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 10,
+      "policy": "SEAC",
+      "published_mean_edges": 10.83,
+      "published_vertices": 10,
+      "source_table": 1,
+      "tasks": 9,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 7,
+      "domain": "PP",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 7,
+      "policy": "SEAC",
+      "published_mean_edges": 6,
+      "published_vertices": 7,
+      "source_table": 1,
+      "tasks": 6,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 4,
+      "domain": "RW",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 20,
+      "policy": "SEAC",
+      "published_mean_edges": 19,
+      "published_vertices": 20,
+      "source_table": 1,
+      "tasks": 19,
+      "vertex_identity_consistent": true
+    },
+    {
+      "agents": 9,
+      "domain": "SR",
+      "edge_count_at_least_connected_dag_minimum": true,
+      "expected_vertices_if_all_tasks_observed": 8,
+      "policy": "SEAC",
+      "published_mean_edges": 7.88,
+      "published_vertices": 8,
+      "source_table": 1,
+      "tasks": 7,
+      "vertex_identity_consistent": true
+    }
+  ],
+  "type": "theoretical_consistency_only",
+  "what_overlap_or_aggregation_gap": {
+    "available_other_tasks_for_single_query": 18,
+    "interpretation": "If the table counts one query over distinct task IDs, certain and uncertain sets must overlap; alternatively multiple query counts are aggregated. The paper lacks the query-level reference data.",
+    "minimum_overlap_if_one_query_with_unique_task_ids": 2,
+    "published_certain_plus_uncertain": 20,
+    "setting": "SEAC RW(4,19)"
+  }
+}

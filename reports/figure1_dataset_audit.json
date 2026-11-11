@@ -1,0 +1,37 @@
+{
+  "algorithm": null,
+  "comparisons": {},
+  "domain": null,
+  "episodes": 1,
+  "measured": {
+    "edge_count_histogram": {
+      "8": 1
+    },
+    "mean_edges": 8.0,
+    "mean_nodes": 7.0,
+    "unique_diagrams": 1
+  },
+  "missing_for_full_replication": [
+    "verified author checkpoints/trajectory provenance",
+    "exact domain event-completion detectors and episode configurations",
+    "authors' SEAC/IA2C training hyperparameters and random seeds",
+    "the paper's query predicate selections and aggregation definitions",
+    "exact baseline graph construction and original user-study data"
+  ],
+  "n_agents": null,
+  "n_tasks": null,
+  "provenance": {
+    "environment_commit": null,
+    "episode_source": null,
+    "event_extraction_version": null,
+    "policy_checkpoint_sha256": null,
+    "seed": null
+  },
+  "published_result_reproduced": null,
+  "query_results": [],
+  "reference": null,
+  "reference_eligible": false,
+  "reference_status": "insufficient_episodes_or_unmatched_setting",
+  "source_sha256": "fb776118e64ee95385c5fe89c034186c7998ca5c4ada754db9c913fed71f689b",
+  "status": "measured_from_trajectories"
+}

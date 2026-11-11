@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmarl-explain"
+version = "0.1.0"
+description = "Trace-based reimplementation of HDS and query explanations from AAAI-26"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Replication contributors"}]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7", "numpy>=1.23"]
+lbf = ["lbforaging==2.0.0"]
+audit = ["networkx>=3"]
+
+[project.scripts]
+dmarl-explain = "dmarl_explain.cli:main"
+dmarl-benchmark = "dmarl_explain.benchmark_cli:main"
+dmarl-collect = "dmarl_explain.rollout_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+dmarl_explain = ["published_metrics.json"]

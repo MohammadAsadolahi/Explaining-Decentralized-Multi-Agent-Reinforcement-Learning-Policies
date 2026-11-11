@@ -1,0 +1,5 @@
+{
+  "task:A": true,
+  "task:B": false,
+  "task:C": false
+}

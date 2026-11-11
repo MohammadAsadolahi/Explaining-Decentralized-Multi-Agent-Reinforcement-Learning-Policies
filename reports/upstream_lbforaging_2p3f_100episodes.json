@@ -1,0 +1,662 @@
+{
+  "dataset": {
+    "algorithm": "HEURISTIC_NOT_SEAC_OR_IA2C",
+    "configuration": {
+      "force_coop": false,
+      "grid": 11,
+      "max_steps": 50,
+      "sight": 1
+    },
+    "domain": "LBF",
+    "environment_distribution": "lbforaging==2.0.0",
+    "episode_source": "real_upstream_lbforaging_not_AAAI_policies",
+    "episodes": [
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1",
+          "food_2"
+        ],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_1",
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0",
+          "food_2"
+        ],
+        "1": [
+          "food_1",
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0",
+          "food_1",
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2",
+          "food_1"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0",
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_0",
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_1",
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_1",
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_2",
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0",
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": [
+          "food_2"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0",
+          "food_1"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      },
+      {
+        "0": [
+          "food_0"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_1"
+        ]
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_2"
+        ],
+        "1": []
+      },
+      {
+        "0": [],
+        "1": []
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": [
+          "food_0"
+        ]
+      },
+      {
+        "0": [
+          "food_1"
+        ],
+        "1": []
+      }
+    ],
+    "event_extraction_version": "lbf_field_reward_load_v1",
+    "n_agents": 2,
+    "n_tasks": 3,
+    "policy_checkpoint_sha256": null,
+    "seed": 20261111
+  },
+  "report": {
+    "algorithm": "HEURISTIC_NOT_SEAC_OR_IA2C",
+    "comparisons": {},
+    "completed_tasks_histogram": {
+      "0": 38,
+      "1": 39,
+      "2": 20,
+      "3": 3
+    },
+    "configuration": {
+      "force_coop": false,
+      "grid": 11,
+      "max_steps": 50,
+      "sight": 1
+    },
+    "domain": "LBF",
+    "environment_distribution": "lbforaging==2.0.0",
+    "episodes": 100,
+    "measured": {
+      "edge_count_histogram": {
+        "0": 38,
+        "1": 39,
+        "2": 20,
+        "3": 2,
+        "4": 1
+      },
+      "mean_edges": 0.89,
+      "mean_nodes": 1.88,
+      "unique_diagrams": 27
+    },
+    "missing_for_full_replication": [
+      "verified author checkpoints/trajectory provenance",
+      "exact domain event-completion detectors and episode configurations",
+      "authors' SEAC/IA2C training hyperparameters and random seeds",
+      "the paper's query predicate selections and aggregation definitions",
+      "exact baseline graph construction and original user-study data"
+    ],
+    "n_agents": 2,
+    "n_tasks": 3,
+    "policy_class": "LocalLBFHeuristic (NOT original MARL)",
+    "provenance": {
+      "environment_commit": null,
+      "episode_source": "real_upstream_lbforaging_not_AAAI_policies",
+      "event_extraction_version": "lbf_field_reward_load_v1",
+      "policy_checkpoint_sha256": null,
+      "seed": 20261111
+    },
+    "published_result_reproduced": null,
+    "query_results": [],
+    "reference": null,
+    "reference_eligible": false,
+    "reference_status": "insufficient_episodes_or_unmatched_setting",
+    "source_sha256": null,
+    "status": "measured_from_trajectories"
+  }
+}

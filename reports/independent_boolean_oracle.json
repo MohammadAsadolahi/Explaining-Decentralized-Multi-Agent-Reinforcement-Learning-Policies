@@ -1,0 +1,10 @@
+{
+  "source": "independent brute-force truth-table oracle (not training)",
+  "cases": 606,
+  "three_bit_functions_exhaustive": 256,
+  "four_bit_functions_seeded": 350,
+  "seed": 20261111,
+  "failures": [],
+  "passed": true,
+  "elapsed_seconds": 3.729
+}

@@ -121,3 +121,8 @@ answers require an externally specified shared task ontology and are rejected
 for such datasets. An additional independent NetworkX differential oracle
 (`python scripts/independent_stress_oracle.py`) checked 2,400 randomized
 partial-order instances without differences.
+
+An independently implemented exhaustive Boolean oracle checked **606
+fully-observed truth tables** (all 256 three-bit functions and 350 seeded
+four-bit functions) for exact equivalence and optimal literal/term cost.
+Execute `python scripts/exhaustive_boolean_oracle.py` to repeat the check.

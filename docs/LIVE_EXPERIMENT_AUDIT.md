@@ -76,3 +76,14 @@ in another. Per-episode Hasse diagrams and their structural statistics remain
 valid; trajectory-aggregated linguistic query answers are not meaningful
 without a stable task ontology. The benchmark harness now rejects query-based
 explanations for datasets marked `task_identity_scope='episode_local'`.
+
+## Independent exact Boolean audit
+
+`python scripts/exhaustive_boolean_oracle.py` exhaustively checked all 256
+Boolean functions of three variables and 350 additional seeded four-variable
+functions. An independent full-cube enumeration plus dynamic-programming
+set-cover oracle agreed with the package's exact minimum-literal DNF solver
+for all 606 cases, including fully observed true/false truth-table semantics.
+The recorded result is `reports/independent_boolean_oracle.json`.
+This validates Boolean minimization, not the author-specific feature selection
+or the scientific causality of a generated natural-language prerequisite.

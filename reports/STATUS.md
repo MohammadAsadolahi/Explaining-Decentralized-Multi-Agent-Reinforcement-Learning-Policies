@@ -40,3 +40,8 @@ not a recovered policy evaluation.
 - **No published Table 1–6 reproduction claim.** No original checkpoints,
   training traces, complete domain adapters or query predicates available.
   Food labels in these recorded upstream runs are episode-local indices.
+
+- **606 independent Boolean minimization checks**, including every 3-variable
+  truth table and 350 seeded 4-variable truth tables, using brute-force cube
+  enumeration and dynamic-programming optimal cover; zero differences.
+  Output: `independent_boolean_oracle.json`.

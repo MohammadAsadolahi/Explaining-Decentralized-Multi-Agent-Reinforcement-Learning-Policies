@@ -22,6 +22,10 @@ class BooleanExplanation:
     targets: tuple[int, ...]
     non_targets: tuple[int, ...]
     text: str
+    # For Why Not, CNF of changes to *escape* the observed failure formula:
+    # AND over clauses, OR over (feature, desired_success_value) literals.
+    repair_clauses: tuple[tuple[tuple[str, bool], ...], ...] = ()
+    caveats: tuple[str, ...] = ()
 
     def to_dict(self) -> dict:
         return {
@@ -32,6 +36,11 @@ class BooleanExplanation:
             "targets": list(self.targets),
             "non_targets": list(self.non_targets),
             "text": self.text,
+            "caveats": list(self.caveats),
+            "repair_clauses": [
+                [{"feature": f, "desired_value": v} for f, v in clause]
+                for clause in self.repair_clauses
+            ] if self.query_type == 'why_not' else None,
         }
 
 
@@ -89,23 +98,69 @@ def uncertainty_dictionary(diagrams: Sequence[HasseDiagram], query_task: str,
             group <= d.agents_by_task[query_task]}
 
 
+def _feature_sentence(feature: str, desired_true: bool, uncertain: bool) -> str:
+    """Render a desired successful precondition as paper-style must/may text.
+
+    These templates work for built-in task and agent completion predicates.
+    Domain-specific predicates (e.g. a robot *detects* a fire) need an
+    application-specific renderer; the paper supplies no vocabulary mapping.
+    """
+    modal = 'may need to' if uncertain else 'must'
+    parts = feature.split(':')
+    if len(parts) == 2 and parts[0] == 'task':
+        return (f'Task {parts[1]} {modal} be completed' if desired_true
+                else f'Task {parts[1]} {modal} remain incomplete')
+    if len(parts) == 3 and parts[0] == 'agent':
+        return (f'Agent {parts[1]} {modal} complete task {parts[2]}' if desired_true
+                else f'Agent {parts[1]} {modal} avoid completing task {parts[2]}')
+    return (f'{feature} {modal} hold' if desired_true
+            else f'{feature} {modal} not hold')
+
+
+def _repair_cnf(formula: tuple[Implicant, ...], features: tuple[str, ...]):
+    """De Morgan complement of the distinguishing failed-state DNF.
+
+    Formula = OR of failed-state cubes; to escape *all* characterized failure
+    cubes requires AND of clauses, one per cube, with each literal inverted.
+    This is logically precise, not a causal intervention guarantee.
+    """
+    return tuple(tuple((feature, not value)
+                       for feature, value in sorted(cube.as_dict(features).items()))
+                 for cube in formula)
+
+
 def _formula_text(formula: tuple[Implicant, ...], features: tuple[str, ...],
-                  uncertain: frozenset[str], prefix: str) -> str:
+                  uncertain: frozenset[str], prefix: str, *,
+                  query_type: str) -> str:
+    """When -> DNF prerequisites, Why Not -> CNF repairs (De Morgan)."""
     if not formula:
-        return f"{prefix}: no distinguishing condition was found."
+        return f'{prefix}: no distinguishing condition was found.'
+    if query_type == 'why_not':
+        clauses = _repair_cnf(formula, features)
+        if any(not clause for clause in clauses):
+            return (f'{prefix}: the observed failure pattern is a tautology; '
+                    'no corrective condition can be identified from these features.')
+        rendered = []
+        for clause in clauses:
+            # To break a failed-state conjunction, altering *any one* of its
+            # literals suffices. Across multiple failure cubes, *every* cube
+            # must be broken, hence AND of OR clauses.
+            options = [_feature_sentence(feature, value, feature in uncertain)
+                       for feature, value in clause]
+            rendered.append('(' + ' OR '.join(options) + ')')
+        return (f'{prefix}; changes that avoid the observed failure formula: '
+                + ' AND '.join(rendered) + '. These are observational, not causal guarantees.')
     terms = []
     for cube in formula:
         literals = cube.as_dict(features)
         if not literals:
-            terms.append("no additional conditions")
+            terms.append('no additional distinguishing conditions')
         else:
-            parts = []
-            for feature, value in sorted(literals.items()):
-                modal = "may" if feature in uncertain else "must"
-                action = "hold" if value else "not hold"
-                parts.append(f"{feature} {modal} {action}")
-            terms.append(" and ".join(parts))
-    return f"{prefix}: " + " OR ".join(f"({term})" for term in terms) + "."
+            terms.append(' and '.join(
+                _feature_sentence(feature, desired_true=value,
+                                  uncertain=feature in uncertain)
+                for feature, value in sorted(literals.items())))
+    return f'{prefix}: ' + ' OR '.join(f'({term})' for term in terms) + '.'
 
 
 def _select_features(diagrams: Sequence[HasseDiagram],
@@ -147,9 +202,26 @@ def explain_when(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
     cubes = minimize(positives, negatives, len(fs), max_features=max_features)
     uncertain = frozenset().union(*dictionary.values()) & frozenset(fs)
     label = f"For agents {', '.join(sorted(group))} to complete task {task}"
+    downstream = set().union(*(diagram.reachable(task)
+                               for diagram in ds if task in diagram.agents_by_task))
+    caveats = []
+    used = [cube.as_dict(fs) for cube in cubes]
+    if any(literal.get(f'task:{task}') is True for literal in used):
+        caveats.append('The formula includes the queried outcome itself; '
+                       'it is not an independent precondition.')
+    late_absences = sorted({feature for literals in used
+                            for feature, value in literals.items()
+                            if not value and feature.startswith('task:')
+                            and feature.split(':', 1)[1] in downstream})
+    if late_absences:
+        caveats.append('The formula uses absence of later tasks (' +
+                       ', '.join(late_absences) + ') to distinguish a '
+                       'completion instant from subsequent states; these '
+                       'are not necessarily prerequisites.')
     return BooleanExplanation("when", fs, cubes, uncertain,
                               tuple(positives), tuple(negatives),
-                              _formula_text(cubes, fs, uncertain, label))
+                              _formula_text(cubes, fs, uncertain, label, query_type="when"),
+                              caveats=tuple(caveats))
 
 
 def explain_why_not(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
@@ -166,7 +238,21 @@ def explain_why_not(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
     if not group:
         raise ValueError("A nonempty agent group is required")
     ds = tuple(diagrams)
-    fs = _select_features(ds, features)
+    if features is None:
+        # A Why-Not explanation is intended to identify *missing prerequisites*.
+        # A failed-state vector contains a false `query task completed` bit by
+        # definition; letting the minimizer use that bit returns the vacuous
+        # advice "complete the task" instead of identifying prerequisites.
+        # The paper's feature selectors are unavailable, so this explicitly
+        # chosen default omits query-completion outcome labels. Users may
+        # override the feature vocabulary when reference predicates are known.
+        eligible = [feature for feature in default_features(ds)
+                    if feature != f'task:{task}'
+                    and not (feature.startswith('agent:') and
+                             feature.endswith(f':{task}'))]
+        fs = _select_features(ds, eligible)
+    else:
+        fs = _select_features(ds, features)
     if set(conditions) - set(fs):
         raise ValueError("Conditions contain features outside the selected vocabulary")
     dictionary = uncertainty_dictionary(ds, task, group)
@@ -184,7 +270,8 @@ def explain_why_not(diagrams: Sequence[HasseDiagram], agents: Iterable[str],
     label = f"Why agents {', '.join(sorted(group))} do not complete task {task} under the supplied conditions"
     return BooleanExplanation("why_not", fs, cubes, uncertain,
                               tuple(positives), tuple(negatives),
-                              _formula_text(cubes, fs, uncertain, label))
+                              _formula_text(cubes, fs, uncertain, label, query_type="why_not"),
+                              _repair_cnf(cubes, fs))
 
 
 def explain_what(diagrams: Sequence[HasseDiagram], task: str) -> WhatExplanation:

@@ -90,3 +90,20 @@ scalability measurements (not the original empirical results). The exact
 Boolean minimizer now supports sparse high-dimensional observation vectors
 without a hard 14-feature limit; it fails transparently if the combinatorial
 prime-implicant budget is exceeded.
+
+**Why Not language semantics:** The failure-state discriminator is a DNF;
+proposed conditions to avoid that *observed* pattern are emitted as its exact
+De Morgan CNF complement (`repair_clauses` in JSON). These conditions are
+classification-derived hypotheses, not proof that interventions will change
+the learned policy. See the [language audit](docs/REPLICATION.md).
+
+To avoid vacuous suggestions such as "complete the queried task" in a **Why
+Not** answer, its default feature selection excludes query-outcome predicates
+(the paper does not supply its domain-dependent selector). This can be
+overridden by explicitly passing the paper's reference predicates. Example:
+
+```bash
+dmarl-explain examples/figure1.json --query why-not --task C --agents 2 4 \
+  --features task:A task:B \
+  --conditions examples/why_not_prerequisites.json
+```

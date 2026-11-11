@@ -48,3 +48,35 @@ The paper's §5 benchmarks four domains: search-and-rescue (SR), level-based for
 3. **Scaffold implemented:** `dmarl-collect` can execute trusted policy/environment/event adapters to save 100 episodes; `dmarl-benchmark` measures HDS, validates task orders independently and compares to reference Tables 1/3. Exact source adapters and reference datasets are missing.
 4. **Partially implemented:** optional queries are evaluated from supplied real datasets, but original per-query predicates and author answers must be obtained to match Tables 2/4/5/6.
 5. **Missing:** Reconstruct original user-study instruments/results separately (not recoverable from algorithm pseudocode alone). See `docs/FULL_EXPERIMENT_REPLICATION.md` for detailed protocol.
+
+## Explanation-language audit and logical safety
+
+Why Not applies Boolean minimization to **observed failure** conditions. The
+new structured `repair_clauses` output is the exact **De Morgan CNF
+complement** of this distinguishing failure formula: every failure cube must
+be escaped, with at least one literal changing in each cube. This corrects an
+earlier rendering issue where all literal polarities were reversed but the
+AND/OR structure was not. A randomized exhaustive Boolean complement test
+checks the algebra. The English output explicitly says these are
+*observational changes*, not experimentally established causal interventions.
+This rendering remains an independently selected template because the paper
+publishes neither the full feature-to-sentence map nor author reference output.
+
+When Why Not features are omitted, the implementation additionally excludes
+any completion predicate for the queried task itself: otherwise minimizing a
+failed state with `task:C = false` often produces the vacuous output "complete
+C". This is a **documented, unconfirmed feature-selection choice**, not a
+claim about the authors' inaccessible feature extractor. The full vocabulary
+can still be supplied explicitly for exact comparisons with author outputs.
+
+## Source-level ambiguity: node discrimination versus temporal prerequisites
+
+For the conference Figure 1 task C query, applying Algorithm 2 exactly at the
+**node-classification** level can select the absence of tasks D/E (which occur
+*after* C) to discriminate the C node from subsequent nodes. That Boolean
+formula is a correct *observational node classifier* but not a necessary
+precondition for completing C. This demonstrates why a minimal truth-table
+separator alone cannot justify a causal/temporal explanation. `explain_when`
+now emits explicit `caveats` if a selected literal is a downstream task's
+absence or the queried outcome itself. Domain-specific `Fq` and node labeling
+from the authors would be needed to remove this uncertainty legitimately.

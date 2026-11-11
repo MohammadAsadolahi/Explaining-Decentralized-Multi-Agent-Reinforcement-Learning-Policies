@@ -86,3 +86,53 @@ def test_figure_1_documented_when_vocabulary_is_separable():
     assert all(eval_formula(result.formula, p) for p in result.targets)
     assert not any(eval_formula(result.formula, n) for n in result.non_targets)
     assert 'task:B' in result.uncertain_features
+
+
+def test_why_not_explanation_describes_missing_success_precondition():
+    # B is unordered relative to queried C, so B is a possible precondition.
+    d = build_hasse({1: ['A', 'B'], 2: ['A', 'C']})
+    answer = explain_why_not([d], [2], 'C', {'task:B': False},
+                             features=['task:B'])
+    assert answer.formula[0].as_dict(answer.features) == {'task:B': False}
+    assert 'Task B may need to be completed' in answer.text
+    assert 'must not hold' not in answer.text
+
+
+def test_when_explanation_uses_must_for_certain_preconditions():
+    d = build_hasse({1:['A','B']})
+    answer = explain_when([d], [1], 'B', features=['task:B'])
+    assert 'Task B must be completed' in answer.text
+
+
+def test_why_not_repair_cnf_is_boolean_complement_of_failure_dnf():
+    """Regression: OR-of-failure-ANDs must not be incorrectly negated to DNF."""
+    from dmarl_explain.explanations import _repair_cnf
+    # Failure is (A AND B) OR (NOT C). Repair is (NOT A OR NOT B) AND C.
+    formula = minimize({0b011, 0b111, 0b000, 0b010, 0b100, 0b110},
+                       {0b001, 0b101}, 3)
+    # Use the actual minimum failure DNF rather than trusting its shape.
+    features = ('A', 'B', 'C')
+    clauses = _repair_cnf(formula, features)
+    for sample in range(8):
+        successes = all(any(bool(sample & (1 << features.index(feature))) == value
+                                for feature, value in clause)
+                        for clause in clauses)
+        assert successes == (not eval_formula(formula, sample))
+
+
+def test_why_not_default_feature_selection_avoids_tautological_outcome():
+    d = build_hasse({1: ['A','B'], 2: ['A','C']})
+    result = explain_why_not([d], [2], 'C', {'task:A': True})
+    assert 'task:C' not in result.features
+    assert 'agent:2:C' not in result.features
+    assert all(not f.endswith(':C') for f in result.features if f.startswith('agent:'))
+
+
+def test_when_warns_about_postconditions_in_observational_classifier():
+    d = build_hasse({'1': ['A','B','F'], '2': ['A','C','D'],
+                     '3': ['B','D','F'], '4': ['C','E','F']})
+    explanation = explain_when([d], [2,4], 'C',
+                               features=['task:A','task:B','task:C','task:D',
+                                         'task:E','task:F','agent:2:C','agent:4:C'])
+    assert any('later tasks' in warning for warning in explanation.caveats)
+    assert any('queried outcome itself' in warning for warning in explanation.caveats)

@@ -36,6 +36,7 @@ def main():
             'environment_distribution': f'lbforaging=={version}',
             'event_extraction_version': 'lbf_field_reward_load_v1',
             'seed': args.seed,
+            'task_identity_scope': 'episode_local',
             'policy_checkpoint_sha256': None,
             'episodes': collect_episodes(
                 lambda: LBFAdapter(n_agents=args.agents, n_food=args.food,

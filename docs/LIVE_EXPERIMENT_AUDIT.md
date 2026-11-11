@@ -46,3 +46,33 @@ extractor, and original query feature selection must still be obtained.
 The paper's reported experimental hardware, convergence behavior and
 hundreds of millions of training steps cannot be reproduced simply by running
 the post-hoc algorithm on 100 invented episodes.
+
+## Verified external execution (GitHub Actions run 42991743637)
+
+All five jobs passed (two Python unit-test jobs and three pinned upstream LBF
+rollouts). Downloaded 100-episode JSON artifacts were independently validated
+in the sandbox with a second graph-analysis process:
+
+| agents/food | mean HDS nodes | mean HDS edges | any-food episodes | full-clear episodes |
+|---:|---:|---:|---:|---:|
+| 2/3 | 1.88 | 0.89 | 62/100 | 3/100 |
+| 5/5 | 2.62 | 1.62 | 87/100 | 2/100 |
+| 9/9 | 5.20 | 4.22 | 99/100 | 0/100 |
+
+All **300 real external environment episodes** satisfy the independently
+reconstructed task-order reachability and minimal-cover relations. The outputs
+have separate artifact hashes and a reproducible standalone verification
+script: `python scripts/audit_lbf_artifacts.py reports/upstream_lbforaging_*_100episodes.json`.
+The paper's Table 1 reports 10 vertices for SEAC LBF(9,9), but our heuristic
+produces a mean of 5.20 because it only collects 4.2 of the nine food items
+on average. **This is not a failed replication of SEAC**: no SEAC policy was
+trained or executed. The graph method matches its input trajectories.
+
+### Unavoidable cross-episode task identity issue
+
+Food IDs are assigned in coordinate order *at each reset*, so `food_0` in
+one episode does not necessarily mean the same physical goal as `food_0`
+in another. Per-episode Hasse diagrams and their structural statistics remain
+valid; trajectory-aggregated linguistic query answers are not meaningful
+without a stable task ontology. The benchmark harness now rejects query-based
+explanations for datasets marked `task_identity_scope='episode_local'`.

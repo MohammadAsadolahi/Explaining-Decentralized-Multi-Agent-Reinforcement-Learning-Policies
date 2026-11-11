@@ -15,6 +15,7 @@ dependencies = []
 [project.optional-dependencies]
 test = ["pytest>=7", "numpy>=1.23"]
 lbf = ["lbforaging==2.0.0"]
+audit = ["networkx>=3"]
 
 [project.scripts]
 dmarl-explain = "dmarl_explain.cli:main"

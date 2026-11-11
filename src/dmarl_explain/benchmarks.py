@@ -108,6 +108,16 @@ def evaluate_dataset(data: Mapping[str, Any]) -> dict[str, Any]:
     # Optional user-provided queries can be evaluated, but can't be declared
     # matches to Tables 2/4/5/6 without the paper's original query selection.
     query_results = []
+    # Older pinned LBF artifacts were emitted before this explicit metadata
+    # field was introduced. Their coordinate-rank IDs are still local to each
+    # episode; infer that provenance rather than accidentally allowing a
+    # cross-episode explanation on incompatible food identities.
+    task_scope = data.get('task_identity_scope') or (
+        'episode_local' if data.get('episode_source') ==
+        'real_upstream_lbforaging_not_AAAI_policies' else 'unspecified')
+    if task_scope == 'episode_local' and data.get('queries'):
+        raise ValueError("Cross-episode explanation queries require stable task identities; "
+                         "the supplied task labels are episode-local")
     for query in data.get('queries', []):
         if query['type'] == 'what':
             explanation = explain_what(ds, query['task'])
@@ -129,6 +139,7 @@ def evaluate_dataset(data: Mapping[str, Any]) -> dict[str, Any]:
     return {'status': 'measured_from_trajectories',
             'published_result_reproduced': None,  # matching rounded values is not provenance verification
             'reference_eligible': eligible,
+            'task_identity_scope': task_scope,
             'reference_status': ('comparable_numeric_metrics_only' if eligible
                                  else 'insufficient_episodes_or_unmatched_setting'),
             'domain': domain, 'algorithm': algorithm, 'n_agents': n_agents,

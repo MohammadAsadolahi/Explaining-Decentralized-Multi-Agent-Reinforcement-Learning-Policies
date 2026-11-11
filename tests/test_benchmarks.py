@@ -111,3 +111,29 @@ def test_collector_per_agent_local_observation_and_shared_events():
                 num_episodes=2, seed=10)
     assert record == [{'1':['A','B'], '2':['A','C']}] * 2
     assert_faithful_hasse(build_hasse(record[0]), record[0])
+
+
+def test_episode_local_task_identity_cannot_be_queried_across_episodes():
+    """Real LBF food_0 can mean different physical foods after each reset."""
+    from dmarl_explain.benchmarks import evaluate_dataset
+    import pytest
+    example = {
+        'task_identity_scope':'episode_local',
+        'episodes':[{'0':['food_0'],'1':['food_0']},
+                    {'0':['food_0'],'1':[]}],
+        'queries':[{'type':'what','task':'food_0'}],
+    }
+    with pytest.raises(ValueError,match='episode-local'):
+        evaluate_dataset(example)
+
+
+def test_episode_local_task_identity_inferred_from_old_real_lbf_artifacts():
+    from dmarl_explain.benchmarks import evaluate_dataset
+    import pytest
+    legacy = {
+        'episode_source':'real_upstream_lbforaging_not_AAAI_policies',
+        'episodes':[{'0':['food_0']},{'0':['food_1']}],
+        'queries':[{'type':'what','task':'food_0'}],
+    }
+    with pytest.raises(ValueError,match='episode-local'):
+        evaluate_dataset(legacy)

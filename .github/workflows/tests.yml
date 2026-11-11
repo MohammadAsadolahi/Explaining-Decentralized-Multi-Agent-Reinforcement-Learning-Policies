@@ -13,13 +13,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install -e '.[test]'
+      - run: python -m pip install -e '.[test,audit]'
       - run: python -m pytest -q
       - name: Benchmark reference and Figure 1 smoke check
         run: |
           python -m dmarl_explain.benchmark_cli examples/figure1.json --output figure1_audit.json
           python scripts/performance_smoke.py > synthetic_smoke.json
           python scripts/paper_consistency.py > paper_consistency.json
+          python scripts/independent_stress_oracle.py --trials 2400 --output independent_oracle.json
 
   upstream-lbforaging:
     name: Upstream LBF 100-episode rollouts (untrained heuristic)

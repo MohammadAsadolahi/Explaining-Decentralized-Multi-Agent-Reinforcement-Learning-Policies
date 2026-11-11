@@ -112,3 +112,12 @@ Upstream environment code and version details are not the authors' own training
 config. **Do not compare these rollout results to paper tables as like-for-like.**
 
 See `docs/LIVE_EXPERIMENT_AUDIT.md` for detailed provenance and limitations.
+
+The completed experiment outputs are committed under
+`reports/upstream_lbforaging_*_100episodes.json` and can be audited with
+`python scripts/audit_lbf_artifacts.py reports/upstream_lbforaging_*_100episodes.json`.
+Task identity from food coordinate ranks is episode-local; cross-episode query
+answers require an externally specified shared task ontology and are rejected
+for such datasets. An additional independent NetworkX differential oracle
+(`python scripts/independent_stress_oracle.py`) checked 2,400 randomized
+partial-order instances without differences.

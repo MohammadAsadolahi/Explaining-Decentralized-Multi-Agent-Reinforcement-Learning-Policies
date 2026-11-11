@@ -115,3 +115,24 @@ verified Boolean optimality, and wide (>153-feature) sparse cases.
 
 These tests support the HDS implementation. **They cannot validate unknown
 training setups, full numerical tables, survey findings, or unseen author code.**
+
+## Actual additional experiments conducted
+
+As of November 11, 2026, we have also executed and stored:
+
+- 800 seeded original gridworld proxy rollouts over the paper's 8 (agent,task)
+  dimension pairs (`reports/executed_proxy_gridworld_not_paper.json`),
+- 300 episodes in the **real upstream lbforaging 2.0.0** environment
+  (`reports/upstream_lbforaging_*_100episodes.json`), and
+- 2,400 independent NetworkX graph differential checks
+  (`reports/independent_networkx_oracle.json`).
+
+The real-environment results were rerun through the core HDS implementation
+and separately checked for reachability and transitive reduction, with all
+300 episode graphs passing. Details and the run link are in
+`docs/LIVE_EXPERIMENT_AUDIT.md`. These establish a functioning externally
+executed benchmark integration, not trained SEAC/IA2C algorithmic equivalence.
+
+**Until author policy checkpoints, reference trajectories, task identity
+ontology and query feature selection are available, no result here should be
+labeled a verified reproduction of the original empirical tables.**

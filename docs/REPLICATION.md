@@ -80,3 +80,22 @@ separator alone cannot justify a causal/temporal explanation. `explain_when`
 now emits explicit `caveats` if a selected literal is a downstream task's
 absence or the queried outcome itself. Domain-specific `Fq` and node labeling
 from the authors would be needed to remove this uncertainty legitimately.
+
+## Cross-table consistency check and evidence of missing feature definitions
+
+`python scripts/paper_consistency.py` verifies **all eight** reported HDS node
+counts equal the number of listed tasks plus one (the start vertex), and that
+published mean HDS edge counts meet the connected-DAG lower bound. These are
+*algebraic checks*, **not** independent reproductions of policy rollouts.
+
+There is a decisive under-specification for the original explanation tables:
+SEAC RW(4,19) reports **153 uncertain features** (Table 2). This project's
+fallback task+agent-task vocabulary has at most `19 + 4*19 = 95` distinct
+features, even if every agent performs every task. Thus **the originally used
+features or their counting/aggregation method cannot be recovered from the
+fallback vocabulary**. Similarly, Table 6's RW(4,19) What counts sum to
+`9 + 11 = 20`, exceeding the 18 distinct *other tasks* for a single query.
+They must overlap or count across queries in some way. The published tables
+lack per-query feature sets and disaggregated trajectory data. Reconstructing
+that pipeline by assertion rather than reference data would be scientifically
+unjustified.

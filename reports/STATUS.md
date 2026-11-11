@@ -13,3 +13,8 @@
 **Tests:** see the GitHub Actions workflow and the `tests/` suite for graph invariants, independent Boolean optimality oracle, 153--200-feature sparse explanations, and dataset-reporting safeguards.
 
 **Operational next step:** obtain real models/checkpoints, training configuration, event extraction code and original test episodes from the authors; run `dmarl-collect` to generate original 100-episode datasets and `dmarl-benchmark` to compare them. Source details: `docs/FULL_EXPERIMENT_REPLICATION.md`.
+
+**Additional structural audit:** `published_algebraic_consistency_not_empirical.json`
+checks all eight published HDS node-count identities, edge lower bounds and
+two unavoidable gaps in feature/count semantics. It is a consistency check,
+not a recovered policy evaluation.

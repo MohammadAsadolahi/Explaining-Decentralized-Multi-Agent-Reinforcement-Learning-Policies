@@ -107,3 +107,11 @@ dmarl-explain examples/figure1.json --query why-not --task C --agents 2 4 \
   --features task:A task:B \
   --conditions examples/why_not_prerequisites.json
 ```
+
+### Independent consistency checks on published numbers
+
+Run `python scripts/paper_consistency.py` to check all eight HDS node-count
+identities (`|V| = |T| + 1`) and graph-edge lower bounds in Tables 1/3.
+The script also flags the feature-vocabulary discrepancy between the 153
+reported uncertain RW features and the fallback 95-feature maximum. It checks
+*algebraic consistency*, not reproduction of the paper's rollouts.

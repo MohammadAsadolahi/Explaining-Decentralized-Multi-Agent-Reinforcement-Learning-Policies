@@ -19,3 +19,4 @@ jobs:
         run: |
           python -m dmarl_explain.benchmark_cli examples/figure1.json --output figure1_audit.json
           python scripts/performance_smoke.py > synthetic_smoke.json
+          python scripts/paper_consistency.py > paper_consistency.json

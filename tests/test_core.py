@@ -72,3 +72,8 @@ def test_random_consistent_episodes_properties():
         for u, v in d.edges:
             alternative = type(d)(d.agents_by_task, d.edges - {(u, v)})
             assert v not in alternative.reachable(u)
+
+
+def test_agent_id_normalization_collision_rejected():
+    with pytest.raises(ValueError, match='collide'):
+        build_hasse({1: ['A'], '1': ['B']})

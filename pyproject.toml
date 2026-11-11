@@ -13,7 +13,8 @@ authors = [{name = "Replication contributors"}]
 dependencies = []
 
 [project.optional-dependencies]
-test = ["pytest>=7"]
+test = ["pytest>=7", "numpy>=1.23"]
+lbf = ["lbforaging==2.0.0"]
 
 [project.scripts]
 dmarl-explain = "dmarl_explain.cli:main"

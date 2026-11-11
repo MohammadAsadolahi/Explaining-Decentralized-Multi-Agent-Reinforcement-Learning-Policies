@@ -20,3 +20,36 @@ jobs:
           python -m dmarl_explain.benchmark_cli examples/figure1.json --output figure1_audit.json
           python scripts/performance_smoke.py > synthetic_smoke.json
           python scripts/paper_consistency.py > paper_consistency.json
+
+  upstream-lbforaging:
+    name: Upstream LBF 100-episode rollouts (untrained heuristic)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {agents: 2, foods: 3, grid: 11}
+          - {agents: 5, foods: 5, grid: 15}
+          - {agents: 9, foods: 9, grid: 19}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original upstream environment and this measurement code
+        run: python -m pip install -e '.[test,lbf]'
+      - name: Execute 100 independent real LBF episodes
+        run: |
+          python scripts/run_lbf_external.py \
+            --agents ${{ matrix.config.agents }} \
+            --food ${{ matrix.config.foods }} \
+            --grid ${{ matrix.config.grid }} \
+            --sight 1 --episodes 100 --seed 20261111 \
+            --output reports/upstream_lbf_${{ matrix.config.agents }}p_${{ matrix.config.foods }}f.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: upstream-lbf-${{ matrix.config.agents }}p-${{ matrix.config.foods }}f
+          path: reports/upstream_lbf_${{ matrix.config.agents }}p_${{ matrix.config.foods }}f.json
+          if-no-files-found: warn

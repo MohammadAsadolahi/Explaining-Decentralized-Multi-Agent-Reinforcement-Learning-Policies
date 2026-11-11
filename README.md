@@ -91,27 +91,24 @@ Boolean minimizer now supports sparse high-dimensional observation vectors
 without a hard 14-feature limit; it fails transparently if the combinatorial
 prime-implicant budget is exceeded.
 
-**Why Not language semantics:** The failure-state discriminator is a DNF;
-proposed conditions to avoid that *observed* pattern are emitted as its exact
-De Morgan CNF complement (`repair_clauses` in JSON). These conditions are
-classification-derived hypotheses, not proof that interventions will change
-the learned policy. See the [language audit](docs/REPLICATION.md).
+## Independent executable experiments (not the paper's trained policies)
 
-To avoid vacuous suggestions such as "complete the queried task" in a **Why
-Not** answer, its default feature selection excludes query-outcome predicates
-(the paper does not supply its domain-dependent selector). This can be
-overridden by explicitly passing the paper's reference predicates. Example:
+**Sandbox:** `PYTHONPATH=src python scripts/run_proxy_experiments.py`
+executes **100 completed policy rollouts per each of eight agent/task count pairs**
+in a small independently constructed cooperative gridworld. This validates
+end-to-end local observations -> actions -> rewards -> agent task traces ->
+Hasse diagrams, *not* the original SR/LBF/RW/PP environments or SEAC/IA2C
+policies. Outputs `reports/executed_proxy_gridworld_not_paper.json`.
 
-```bash
-dmarl-explain examples/figure1.json --query why-not --task C --agents 2 4 \
-  --features task:A task:B \
-  --conditions examples/why_not_prerequisites.json
-```
+**Upstream LBF (GitHub Actions):** the `upstream-lbforaging` job pins the real
+`lbforaging==2.0.0` environment and executes 100 episodes for each of 2p/3f,
+5p/5f, and 9p/9f with sight=1, plus a local-observation greedy *untrained*
+policy. Data and measured HDS statistics are uploaded as CI artifacts.
+`src/dmarl_explain/lbf_adapter.py` identifies a task as an initially placed
+food item and uses a triple signal (global food removal, adjacent LOAD action,
+positive local reward) to identify contributing agents. The extractor's use of
+global state is **post-hoc logging only**; no policy may see that state.
+Upstream environment code and version details are not the authors' own training
+config. **Do not compare these rollout results to paper tables as like-for-like.**
 
-### Independent consistency checks on published numbers
-
-Run `python scripts/paper_consistency.py` to check all eight HDS node-count
-identities (`|V| = |T| + 1`) and graph-edge lower bounds in Tables 1/3.
-The script also flags the feature-vocabulary discrepancy between the 153
-reported uncertain RW features and the fallback 95-feature maximum. It checks
-*algebraic consistency*, not reproduction of the paper's rollouts.
+See `docs/LIVE_EXPERIMENT_AUDIT.md` for detailed provenance and limitations.

@@ -102,8 +102,12 @@ def build_hasse(traces: Mapping[Hashable, Sequence[str]]) -> HasseDiagram:
     edges: set[tuple[str, str]] = set()
     if ROOT in {task for trace in traces.values() for task in trace}:
         raise ValueError(f"{ROOT!r} is reserved")
+    seen_ids: set[str] = set()
     for raw_agent, tasks in traces.items():
         agent = str(raw_agent)
+        if agent in seen_ids:
+            raise ValueError(f"Agent ids collide after string conversion: {agent!r}")
+        seen_ids.add(agent)
         if not agent:
             raise ValueError("Agent identifier must not be empty")
         if len(set(tasks)) != len(tasks):
